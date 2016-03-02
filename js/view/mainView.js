@@ -30,9 +30,10 @@ var MainView = function(container, model){
 	var foodDropListTxt = "";
 		
 	//drop down list
-	foodDropListTxt = "<option value ='starter'>Starters</option>"+
-				"<option value ='main dish'>Main</option>"+
-				"<option value ='dessert'>Dessert</option>";
+	foodDropListTxt = "<option value ='appetizer'>Appetizer</option>"+
+				"<option value ='main dish'>Main Dish</option>"+
+				"<option value ='dessert'>Dessert</option>"+
+				"<option value='empty'>-</option>";
 							
 	this.foodDrop.html(foodDropListTxt);
 		
@@ -59,28 +60,31 @@ var MainView = function(container, model){
 
 	this.updateSearch = function(){
 
-		var string = searchValue.value;
-		var menu = model.getFullMenuBefore();
-		//console.log(menu);
-		for(var i = 0; i < menu.length ; i++){
-			if (string == menu[i].name){
+		//var string = searchValue.value;
+		//model.getRecipeSearch(string);
 
-				foodInfo = "";
+		var menu = model.getSearchDish();
+		console.log(menu.length);
+		//console.log(menu["Results"]);
+
+		foodInfo = "";
+
+		for(var i = 0; i < menu.length ; i++){
+			//if (string == menu[i].name){
 
 				foodInfo +="<div class=\"col-md-4\">"+
 									"<div class=\"thumbnail\">"+
-										"<img src=\"images/"+menu[i].image+"\" id=\""+menu[i].name +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
+										"<img src=\""+menu[i].ImageURL120+"\" id=\""+menu[i].Title +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
 										"<div class=\"caption\">"+
-										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+menu[i].id+"\">"+menu[i].name+"</a></p>"+
-										"<p>"+menu[i].description+"</p>"+
+										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+menu[i].RecipeID+"\">"+menu[i].Title+"</a></p>"+
+										"<p>\"Here is how you make it... Lore ipsum...\"</p>"+
 								"</div></div></div>";
 
 				//this.foodBtnId.push(menu[i].id);
 
-				this.foodDetail.html(foodInfo);
-
-		 	}
+		 	//}
 		}
+		this.foodDetail.html(foodInfo);
 	}
 
 	this.updateType("starter");
@@ -91,6 +95,9 @@ var MainView = function(container, model){
 
 		if (arg == "starter" || arg == "main dish" || arg == "dessert"){
 			this.updateType(arg);
+		}
+		if (arg == "searchSuccess"){
+			this.updateSearch();
 		}
 		
 	}

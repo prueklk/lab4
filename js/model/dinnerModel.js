@@ -7,6 +7,10 @@ var DinnerModel = function() {
 
 	var selectedDish = 0;
 
+	var searchDishes;
+
+	var self = this;
+
 	//TODO Lab 2 implement the data structure that will hold number of guest
 	// and selected dinner options for dinner menu
 
@@ -39,6 +43,11 @@ var DinnerModel = function() {
 	    //TODO Lab 2
 
 	
+	this.getSearchDish = function(){
+		//for (var i=0; i<)
+		return searchDishes.Results;
+	}
+
 	//Returns all the dishes on the menu.
 	this.getFullMenu = function() {
 		// for (var i = 0; i < selectedMenu.length ; i++){
@@ -161,25 +170,62 @@ var DinnerModel = function() {
 	//function that returns all dishes of specific type (i.e. "starter", "main dish" or "dessert")
 	//you can use the filter argument to filter out the dish by name or ingredient (use for search)
 	//if you don't pass any filter all the dishes will be returned - WORKING!
-	this.getAllDishes = function (type,filter) {
-	  return $(dishes).filter(function(index,dish) {
-		var found = true;
-		if(filter){
-			found = false;
-			$.each(dish.ingredients,function(index,ingredient) {
-				if(ingredient.name.indexOf(filter)!=-1) {
-					found = true;
-				}
-			});
-			if(dish.name.indexOf(filter) != -1)
-			{
-				found = true;
-			}
-		}
-	  	return dish.type == type && found;
-	  });	
-	}
-	
+	// this.getAllDishes = function (type,filter) {
+	//   return $(dishes).filter(function(index,dish) {
+	// 	var found = true;
+	// 	if(filter){
+	// 		found = false;
+	// 		$.each(dish.ingredients,function(index,ingredient) {
+	// 			if(ingredient.name.indexOf(filter)!=-1) {
+	// 				found = true;
+	// 			}
+	// 		});
+	// 		if(dish.name.indexOf(filter) != -1)
+	// 		{
+	// 			found = true;
+	// 		}
+	// 	}
+	//   	return dish.type == type && found;
+	//   });	
+	// }
+
+	this.getAllDishes = function(type) {
+	var apiKey = "18f3cT02U9f6yRl3OKDpP8NA537kxYKu";
+	var category = type;
+	var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&category_kw=" + category + "?api_key="+apiKey;
+	$.ajax({
+	         type: "GET",
+	         dataType: 'json',
+	         cache: false,
+	         url: url,
+	         success: function (data) {
+	            console.log(data);
+	            return data;
+	            }
+	         });
+	       }
+
+	this.getRecipeSearch = function(string) {
+        var apiKey = "18f3cT02U9f6yRl3OKDpP8NA537kxYKu";
+        var titleKeyword = string;
+        var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw="
+                  + titleKeyword 
+                  + "&api_key="+apiKey;
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            cache: false,
+            url: url,
+            success: function (data) {
+            	//searchDishes = [];
+            	searchDishes = data;
+            	console.log(searchDishes);
+            	console.log(this);
+                self.notifyObservers("searchSuccess");
+            }
+        });
+    }
+
 	//function that returns the ID from the picture that is clicked in mainView
 	this.addPicId = function(id){
 		selectedDish = id;
