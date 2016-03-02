@@ -42,9 +42,6 @@ var MainView = function(container, model){
 		var foodList = model.getAllDishes(type);
 		var foodDetailTxt ="";
 		
-		this.foodBtnId = [];
-		this.foodBtnArr =[];
-
 		//food box
 		for (var i=0 ;  i < foodList.length ; i++ ){
 
@@ -55,37 +52,39 @@ var MainView = function(container, model){
 										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+foodList[i].id+"\">"+foodList[i].name+"</a></p>"+
 										"<p>"+foodList[i].description+"</p>"+
 								"</div></div></div>";
-
-			this.foodBtnId.push(foodList[i].id);
 		}
 		
 		this.foodDetail.html(foodDetailTxt);
-		//console.log("this.foodBtnId = "+this.foodBtnId);
-
-		for (var j=0; j<this.foodBtnId.length;j++){
-			this.foodBtnArr.push(container.find("#"+this.foodBtnId[j]));
-
-		}
-		//console.log(this.foodBtnArr);
-
-		 // for(var k=0;k<this.foodBtnArr.length;k++){
-		 // 	//console.log(this.foodBtnArr[k]);
-		 	
-			//  for(var l=0;l<this.foodBtnArr[k].length; l++){
-		 // 	 	//console.log(this.foodBtnArr[k][l]);
-	  //  			this.foodBtnArr[k][l].onclick = function(){
-	  //   			//console.log(this.id);//food id
-			// 		model.addPicId(this.id);
-	  //   		}
-	  // 		}	
-		 // }
-
-
 	}
 
-	
-	
+	this.updateSearch = function(){
+
+		var string = searchValue.value;
+		var menu = model.getFullMenuBefore();
+		//console.log(menu);
+		for(var i = 0; i < menu.length ; i++){
+			if (string == menu[i].name){
+
+				foodInfo = "";
+
+				foodInfo +="<div class=\"col-md-4\">"+
+									"<div class=\"thumbnail\">"+
+										"<img src=\"images/"+menu[i].image+"\" id=\""+menu[i].name +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
+										"<div class=\"caption\">"+
+										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+menu[i].id+"\">"+menu[i].name+"</a></p>"+
+										"<p>"+menu[i].description+"</p>"+
+								"</div></div></div>";
+
+				//this.foodBtnId.push(menu[i].id);
+
+				this.foodDetail.html(foodInfo);
+
+		 	}
+		}
+	}
+
 	this.updateType("starter");
+
 	
 	this.update = function(model, arg) {
 		//console.log("UPDATE mainView // arg = "+arg);
