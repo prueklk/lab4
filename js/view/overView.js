@@ -43,10 +43,10 @@ var OverView = function(container, model){
 
 			foodDetailTxt +="<div class=\"col-md-4\">"+
 									"<div class=\"thumbnail\">"+
-										"<img src=\"images/"+fullMenu[i].image+"\" id=\""+fullMenu[i].name +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
+										"<img src=\""+fullMenu[i].ImageURL+"\" id=\""+fullMenu[i].Title +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
 										"<div class=\"caption\">"+
-										"<p><h4>"+fullMenu[i].name+"</h4></p>"+
-										'<p class="costColor">SEK '+model.getFoodPrice(fullMenu[i].id)+'</p>'+
+										"<p><h4>"+fullMenu[i].Title+"</h4></p>"+
+										'<p class="costColor">SEK '+model.getFoodPrice(fullMenu[i].RecipeID)+'</p>'+
 								"</div></div></div>";
 
 		}

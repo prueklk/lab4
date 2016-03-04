@@ -10,6 +10,7 @@ var IndexCtrl = function(view, model) {
 		overallStateCtrl.indexView.container.hide();
 		overallStateCtrl.sideMenuView.container.show();
 		overallStateCtrl.mainView.container.show();
+		overallStateCtrl.mainView.prepareView("appetizer");
 	}	
 
 }

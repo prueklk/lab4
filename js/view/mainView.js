@@ -26,7 +26,7 @@ var MainView = function(container, model){
 	this.searchButton = container.find("#searchButton");
 	this.searchValue = container.find("#searchValue");
 
-	
+	var foodList;
 	var foodDropListTxt = "";
 		
 	//drop down list
@@ -36,27 +36,34 @@ var MainView = function(container, model){
 				"<option value='empty'>-</option>";
 							
 	this.foodDrop.html(foodDropListTxt);
-		
 	
-	this.updateType = function(type){
-		
-		var foodList = model.getAllDishes(type);
-		var foodDetailTxt ="";
-		
-		//food box
-		for (var i=0 ;  i < foodList.length ; i++ ){
 
-			foodDetailTxt +="<div class=\"col-md-4\">"+
-									"<div class=\"thumbnail\">"+
-										"<img src=\"images/"+foodList[i].image+"\" id=\""+foodList[i].name +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
-										"<div class=\"caption\">"+
-										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+foodList[i].id+"\">"+foodList[i].name+"</a></p>"+
-										"<p>"+foodList[i].description+"</p>"+
-								"</div></div></div>";
-		}
-		
-		this.foodDetail.html(foodDetailTxt);
+	this.prepareView = function(type){
+		//foodList = model.getAllDishes(type);
+		foodList = model.getRecipeSearch(type);
 	}
+
+	
+	// this.updateType = function(type){
+		
+	// 	var foodDetailTxt ="";
+
+	// 	console.log(foodList);
+		
+	// 	//food box
+	// 	for (var i=0 ;  i < foodList.length ; i++ ){
+
+	// 		foodDetailTxt +="<div class=\"col-md-4\">"+
+	// 								"<div class=\"thumbnail\">"+
+	// 									"<img src=\"images/"+foodList[i].image+"\" id=\""+foodList[i].name +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
+	// 									"<div class=\"caption\">"+
+	// 									"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+foodList[i].id+"\">"+foodList[i].name+"</a></p>"+
+	// 									"<p>"+foodList[i].description+"</p>"+
+	// 							"</div></div></div>";
+	// 	}
+		
+	// 	this.foodDetail.html(foodDetailTxt);
+	// }
 
 	this.updateSearch = function(){
 
@@ -64,12 +71,15 @@ var MainView = function(container, model){
 		//model.getRecipeSearch(string);
 
 		var menu = model.getSearchDish();
-		console.log(menu.length);
+		console.log("updateSearch = "+menu.length);
 		//console.log(menu["Results"]);
 
-		foodInfo = "";
+		if(menu.length == 0){
+			this.foodDetail.html("<h4>Try another keyword!</h4>");
+		}else{	
+			foodInfo = "";
 
-		for(var i = 0; i < menu.length ; i++){
+			for(var i = 0; i < menu.length ; i++){
 			//if (string == menu[i].name){
 
 				foodInfo +="<div class=\"col-md-4\">"+
@@ -79,12 +89,9 @@ var MainView = function(container, model){
 										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+menu[i].RecipeID+"\">"+menu[i].Title+"</a></p>"+
 										"<p>\"Here is how you make it... Lore ipsum...\"</p>"+
 								"</div></div></div>";
-
-				//this.foodBtnId.push(menu[i].id);
-
-		 	//}
+			}
+			this.foodDetail.html(foodInfo);
 		}
-		this.foodDetail.html(foodInfo);
 	}
 
 	this.updateLoading = function(){
@@ -95,14 +102,13 @@ var MainView = function(container, model){
 		this.foodDetail.html("Check your internet connection or try with another keyword");
 	}
 
-	this.updateType("appetizer");
 
 	
 	this.update = function(model, arg) {
-		//console.log("UPDATE mainView // arg = "+arg);
+		console.log("UPDATE mainView // arg = "+arg);
 
 		if (arg == "appetizer" || arg == "main dish" || arg == "dessert"){
-			this.updateType(arg);
+			this.prepareView(arg);
 		}
 		if (arg == "searchSuccess"){
 			this.updateSearch();

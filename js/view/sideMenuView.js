@@ -40,12 +40,12 @@ var SideMenuView = function(container, model){
 								'<th></th>'+
 							'</tr></thead><tbody>';
 		for (var i=0; i<fullMenu.length; i++){
-			var fullPrice = model.getFoodPrice(fullMenu[i].id);
+			var fullPrice = model.getFoodPrice(fullMenu[i].RecipeID);
 
-			menuListTxt += 	'<tr class="costColor"><td>'+fullMenu[i].name+"</td>"+
+			menuListTxt += 	'<tr class="costColor"><td>'+fullMenu[i].Title+"</td>"+
 						"<td>SEK </td>" + 
 						"<td>"+fullPrice+"</td>"+
-						"<td><button id='"+fullMenu[i].id+"'>Delete</button></td></tr>";	
+						"<td><button id='"+fullMenu[i].RecipeID+"'>Delete</button></td></tr>";	
 		}
 
 		menuListTxt += '</tbody><tfoot><tr>'+
@@ -55,10 +55,10 @@ var SideMenuView = function(container, model){
 
 		if(arg=="pending"){
 			var dishId = model.getPicId();
-			var pickedFood = model.getDish(dishId);
+			var pickedFood = model.getPreparedDish();
 			var found = false;
 			if(fullMenu.length == 0){
-				menuListTxt += 	'<p class="pendingTxt">'+pickedFood.name+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
+				menuListTxt += 	'<p class="pendingTxt">'+pickedFood.Title+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
 			}
 			else{
 				for (var i=0; i<fullMenu.length; i++){
@@ -67,7 +67,7 @@ var SideMenuView = function(container, model){
 					}
 				}
 				if (found == false){
-					menuListTxt += 	'<p class="pendingTxt">'+pickedFood.name+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
+					menuListTxt += 	'<p class="pendingTxt">'+pickedFood.Title+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
 					}
 			}
 		}
@@ -91,8 +91,9 @@ var SideMenuView = function(container, model){
 		if (arg == "dishRemoved"){
 			this.updateTable("normal");
 		}
-		if (arg == "newPicId")
+		if (arg == "updateSideView"){
 			this.updateTable("pending");
+		}
 		if (arg == "GetDishError"){
 			alert("Error!");
 		}

@@ -9,6 +9,8 @@ var MainViewCtrl = function(view, model) {
 
 	view.foodDetail.click(function(event){
 		var x = event.target;
+
+		console.log("click foodDetail x.id = "+x.id);
 		model.addPicId(x.id);
 		overallStateCtrl.mainView.container.hide();
 		overallStateCtrl.selectedDishView.container.show();
@@ -17,8 +19,8 @@ var MainViewCtrl = function(view, model) {
 	foodDrop.onchange = function(){
 		var type = document.getElementById("foodDrop").value;
 		if (type!="empty"){
-			view.update(this, type);	
 			searchValue.value = "";
+			view.update(this, type);	
 		}
 	};
 

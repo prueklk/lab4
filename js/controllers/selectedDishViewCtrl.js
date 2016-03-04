@@ -3,7 +3,7 @@ var SelectedDishViewCtrl = function(view, model) {
 
 
 	view.confirmDish.click(function(){
-		model.addDishToMenu(model.getPicId());
+		model.addDishToMenu();
 		overallStateCtrl.mainView.container.show();
 		overallStateCtrl.selectedDishView.container.hide();
 	});

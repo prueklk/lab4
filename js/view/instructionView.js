@@ -37,10 +37,10 @@ var InstructionView = function(container, model){
 			//console.log("fullMenu[i].ingredients = "+fullMenu[i].ingredients);
 			//console.log('fullMenu[i]["ingredients"].length = '+fullMenu[i]["ingredients"].length);
 			
-			for (var j=0; j<fullMenu[i]["ingredients"].length; j++){
+			for (var j=0; j<fullMenu[i]["Ingredients"].length; j++){
 				ingredientTxt += "<tr>"+
-						"<td>"+fullMenu[i]["ingredients"][j].quantity + fullMenu[i]["ingredients"][j].unit +
-						"</td>"+"<td>"+fullMenu[i]["ingredients"][j].name+"</td>"+
+						"<td>"+fullMenu[i]["Ingredients"][j].Quantity + fullMenu[i]["Ingredients"][j].Unit +
+						"</td>"+"<td>"+fullMenu[i]["Ingredients"][j].Name+"</td>"+
 						"</tr>";
 				//console.log('fullMenu[i]["ingredients"][j].name ='+fullMenu[i]["ingredients"][j].name);	
 			}
@@ -50,15 +50,15 @@ var InstructionView = function(container, model){
 			prepViewTxt += '<div class="row">'+
 							'<div class="col-md-6 imgInstruction">'+
 							'<div class="col-md-4">'+
-							'<img src="images/'+fullMenu[i].image+'" class="img-responsive" style="width:128px;height:128px;">'+
+							'<img src="'+fullMenu[i].ImageURL+'" class="img-responsive" style="width:128px;height:128px;">'+
 							'</div>'+
 							'<div class="col-md-8">'+
-							'<h3>'+fullMenu[i].name+'</h3>'+
+							'<h3>'+fullMenu[i].Title+'</h3>'+
 							ingredientTxt+
 							'</div></div>'+
 							'<div class="col-md-6">'+
 							'<h4>Preparation</h4>'+
-							'<p>'+fullMenu[i].description+'</p>'+
+							'<p>Here is how you make it... Lore ipsum...</p>'+
 							'</div></div>';
 
 		}

@@ -33,42 +33,54 @@ var SelectedDishView = function(container, model){
 	// this.tableContent = container.find("#tableContent");
 	// this.totalCostTwo = container.find("#totalCostTwo");
 
+	this.pickedFoodDiv = container.find("#selectedDishDetails");
+
+	var dishId;
+	var pickedFood;
+
+	var prepareDish = function(){
+		console.log("prepareDish");
+		dishId = model.getPicId();
+		pickedFood = model.getDish(dishId);
+	}
 	
 	
 	var dishInfo = function(){
 		
-	
-		this.pickedFoodDiv = container.find("#selectedDishDetails");
+		console.log("dishInfo pickedFood = vvv");
+		pickedFood = model.getPreparedDish();
+		console.log(pickedFood);
 		
-		var dishId = model.getPicId();
-		var pickedFood = model.getDish(dishId);
+	
+		
+		
 		var foodDescription = "";
-		foodDescription += "<h2>"+pickedFood.name+"</h2>"+
-							"<img src=\"images/"+pickedFood.image+"\" id=\""+pickedFood.name+"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
-							"<div>"+ pickedFood.description+"</div>"
+		foodDescription += "<h2>"+pickedFood.Title+"</h2>"+
+							"<img src=\""+pickedFood.ImageURL+"\" id=\""+pickedFood.Title+"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
+							"<div>Here is how you make it... Lore ipsum...</div>"
 		
 		//foodDescription += '<br><button class="btn" id="backButton">Back to Select Dish</button>';
-
+		this.pickedFoodDiv = container.find("#selectedDishDetails");
 		this.pickedFoodDiv.html(foodDescription);
 
 		this.prepDiv = container.find("#prepDiv");
-		this.prepDiv.html("<p>"+pickedFood.description);
+		this.prepDiv.html("<p>Here is how you make it... Lore ipsum...");
 
 
 		//this.ingredientsBox = container.find("#ingredientsBox");
 		this.totalPriceIngr = container.find("#totalCostIngr");
 		
-		var ingredientList = model.getDishIngredients(dishId);
+		var ingredientList = model.getDishIngredients();
 		var ingredientTxt = '';
 		var tableHeader = '<h4>Ingredients for '+model.getNumberOfGuests()+' people</h4>';
 		
 		for (var i=0 ;  i < ingredientList.length ; i++ ){
 		
 			ingredientTxt += '<tbody>'+"<tr>"+
-						"<td>"+ingredientList[i].quantity*model.getNumberOfGuests() + ingredientList[i].unit+"</td>"+
-						"<td>"+ingredientList[i].name+"</td>"+
+						"<td>"+ingredientList[i].Quantity*model.getNumberOfGuests() + ingredientList[i].Unit+"</td>"+
+						"<td>"+ingredientList[i].Name+"</td>"+
 						"<td>SEK</td>"+
-						"<td>"+ingredientList[i].price*model.getNumberOfGuests()+"</td>"+
+						"<td>"+ingredientList[i].Quantity*1*model.getNumberOfGuests()+"</td>"+
 						"</tr>";
 		}
 
@@ -76,7 +88,7 @@ var SelectedDishView = function(container, model){
 						 "<tr><td></td>"+
 						 "<td>Total cost</td>"+
 						 "<td>SEK</td>"+
-						 "<td>"+model.getFoodPrice(dishId)*model.getNumberOfGuests()+"</td>"+
+						 "<td>"+model.getFoodPrice()*model.getNumberOfGuests()+"</td>"+
 						 "</tr></tfoot>";
 		
 		
@@ -87,23 +99,39 @@ var SelectedDishView = function(container, model){
 		
 		this.tableHead.html(tableHeader); 
 		this.tableRows.html(ingredientTxt);
-		this.tableCost.html(model.getFoodPrice(dishId)*model.getNumberOfGuests());
+		this.tableCost.html(model.getFoodPrice()*model.getNumberOfGuests());
 		//this.tablePeople = container.find("#h4num");
 		//this.tablePeople.html = ('Ingredients for'+model.getNumberOfGuests()+'people');
 	}
+	this.updateLoadingDish = function(){
+		this.pickedFoodDiv = container.find("#selectedDishDetails");
+		this.pickedFoodDiv.html("Searching");
+	}
 	
 	this.update = function(model, arg) {
-		//console.log("UPDATE selectedDishView // arg = "+arg);
+		console.log("UPDATE selectedDishView // arg = "+arg);
 		
 		if (arg == "newPicId"){
-			dishInfo();
+
+			prepareDish();
+			//dishInfo();
 		}
+		
+		if(arg =="dishPrepared"){
+			dishInfo();
+			model.notifyObservers("updateSideView");
+		}
+
 		if (arg == "newGuestNumber"){
 			dishInfo();
 		}
 		if (arg == "GetDishError"){
 			alert("Error!");
 		}
+		if(arg == "loadingDish"){
+			this.updateLoadingDish();
+		}
+
 		
 	}
 	

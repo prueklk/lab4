@@ -9,7 +9,11 @@ var DinnerModel = function() {
 
 	var searchDishes;
 
+	var preparedDish;
+
 	var self = this;
+
+	this.apiKey = "XKEdN82lQn8x6Y5jm3K1ZX8L895WUoXN";
 
 	//TODO Lab 2 implement the data structure that will hold number of guest
 	// and selected dinner options for dinner menu
@@ -64,25 +68,58 @@ var DinnerModel = function() {
 	// 	return dishes;
 	// }
 
-	this.getDishIngredients = function(id){
-		var dish = this.getDish(id);
-		return dish.ingredients;
+	this.getDishFromMenu = function(id){
+
+		for (var i = 0; i < selectedMenu.length ; i++){
+			if(selectedMenu[i].RecipeID == id){
+				return selectedMenu[i];
+			}
+		}
+	}
+	this.getDishIngredientsFromMenu = function(id){
+		var dish = this.getDishFromMenu(id);
+		return dish.Ingredients;
+	}
+	this.getFoodPriceFromMenu = function(id){
+
+		var allIngredients = this.getDishIngredientsFromMenu(id);
+		var foodPrice = 0;
+
+		for (var i = 0 ; i < allIngredients.length; i++){
+			//var a = allIngredients[i].price;
+			//console.log(allIngredients[i].Quantity);
+			var a =allIngredients[i].Quantity*1;
+
+			foodPrice += a;
+		}
+		return foodPrice;
+	}
+	
+
+	this.getDishIngredients = function(){
+		// var dish = this.getDish(id);
+		var dish = this.getPreparedDish();
+		return dish.Ingredients;
 	}
 
 	//TODO Lab 2
 
-	this.getFoodPrice = function(id){
+	this.getFoodPrice = function(){
 
-		var allIngredients = this.getDishIngredients(id);
+		var allIngredients = this.getDishIngredients();
 		var foodPrice = 0;
 
 		for (var i = 0 ; i < allIngredients.length; i++){
-			var a = allIngredients[i].price;
+			//var a = allIngredients[i].price;
+			//console.log(allIngredients[i].Quantity);
+			var a =allIngredients[i].Quantity*1;
+
 			foodPrice += a;
 		}
 		return foodPrice;
 	}
 
+	
 	
 	//Returns all ingredients for all the dishes on the menu.
 	this.getAllIngredients = function() {
@@ -128,29 +165,28 @@ var DinnerModel = function() {
 
 	//Adds the passed dish to the menu. If the dish of that type already exists on the menu
 	//it is removed from the menu and the new one added.
-	this.addDishToMenu = function(id) {
+	this.addDishToMenu = function() {
 
 		for (var i=0 ;  i < selectedMenu.length ; i++ ){
 
-			if(this.getDish(id).type == selectedMenu[i].type){
+			if(this.getPreparedDish().Category == selectedMenu[i].Category){
 				
 				//console.log("selectedMenu.length = "+selectedMenu.length);
 
 				 //check if selectedMenu is empty or not
 					 	//check if the new dish is duplicate
-					 		selectedMenu.splice(i, 1); //if so, remove that dish
-					 	}
-					 }
+				selectedMenu.splice(i, 1); //if so, remove that dish
+			}
+		}
 					 	//console.log("dishes[i].name = "+dishes[i].name);
-					 	selectedMenu.push(this.getDish(id)); //add the new dish
+		selectedMenu.push(this.getPreparedDish()); //add the new dish
 
-					 	this.notifyObservers("newMenu");
-						return selectedMenu;
-					console.log("hello");
-
+		this.notifyObservers("newMenu");
+		return selectedMenu;
+					
 				//selectedMenu.push(dishes[i]);
 				//return selectedMenu;
-			}
+	}
 		//TODO Lab 2
 
 	//Removes dish from menu - NOT SURE IT IS WORKING CORRECT!
@@ -189,33 +225,36 @@ var DinnerModel = function() {
 	//   });	
 	// }
 
-	this.getAllDishes = function(type) {
-		this.notifyObservers("loading");
-	var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
-	var category = type;
-	var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=" + category + "?api_key="+apiKey;
-	$.ajax({
-	        type: "GET",
-	        dataType: 'json',
-	        cache: false,
-	        url: url,
-	        success: function (data) {
-	            console.log(data);
-	            return data;
-	            },
-	        error: function(){
-            	self.notifyObservers("error");
-            }
-	         });
-	}
+	// this.getAllDishes = function(type) {
+	// 	console.log("getAllDishes = "+type);
+	// 	this.notifyObservers("loading");
+	// 	// var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
+	// 	var category = type;
+	// 	var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw="
+ //                  + type 
+ //                  + "&api_key="+self.apiKey;
+	// 	$.ajax({
+	//         type: "GET",
+	//         dataType: 'json',
+	//         cache: false,
+	//         url: url,
+	//         success: function (data) {
+	//             console.log(data.Results);
+	//             //return data.Results;
+	//             },
+	//         error: function(){
+ //            	self.notifyObservers("error");
+ //            }
+	//          });
+	// }
 
 	this.getRecipeSearch = function(string) {
 		this.notifyObservers("loading");
-        var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
+        // var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
         var titleKeyword = string;
         var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw="
                   + titleKeyword 
-                  + "&api_key="+apiKey;
+                  + "&api_key="+self.apiKey;
         $.ajax({
             type: "GET",
             dataType: 'json',
@@ -224,8 +263,8 @@ var DinnerModel = function() {
             success: function (data) {
             	//searchDishes = [];
             	searchDishes = data;
-            	console.log(searchDishes);
-            	console.log(this);
+            	//console.log(searchDishes);
+            	//console.log(this);
                 self.notifyObservers("searchSuccess");
             },
             error: function(){
@@ -236,13 +275,16 @@ var DinnerModel = function() {
 
 	//function that returns the ID from the picture that is clicked in mainView
 	this.addPicId = function(id){
+		//console.log("addPicId");
 		selectedDish = id;
+		//console.log("selectedDish = "+id);
 		this.notifyObservers("newPicId");
 	}
 	
 	this.getPicId = function(){
 		return selectedDish;
 	}
+
 
 	//function that returns a dish of specific ID - WORKING!!
 	// this.getDish = function (id) {
@@ -253,13 +295,23 @@ var DinnerModel = function() {
 	// 	}
 	// }
 
+	//http://api.bigoven.com/recipe/175658?api_key=1hg3g4Dkwr6pSt22n00EfS01rz568IR6
+	//http://api.bigoven.com/recipe/1476937?api_key=1hg3g4Dkwr6pSt22n00EfS01rz568IR6
+
+	this.keepPreparedDish = function(data){
+		preparedDish = data;
+	}
+
+	this.getPreparedDish = function(){
+		return preparedDish;
+	}
+
 	this.getDish = function(id){
-		this.notifyObservers("loading");
-        var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
+		console.log("getDish id = "+id);
+		this.notifyObservers("loadingDish");
+        // var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
         var dishID = id;
-        var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&RecipeID_kw="
-                  + dishID
-                  + "&api_key="+apiKey;
+        var url = "http://api.bigoven.com/recipe/"+id+"?api_key="+self.apiKey;
         $.ajax({
             type: "GET",
             dataType: 'json',
@@ -267,7 +319,10 @@ var DinnerModel = function() {
             url: url,
             success: function (data) {
             	//searchDishes = [];
-            	return data;
+            	console.log(data);
+            	self.keepPreparedDish(data);
+            	self.notifyObservers("dishPrepared");
+            	//return data;
             },
             error: function(){
             	self.notifyObservers("GetDishError");
@@ -285,7 +340,7 @@ var DinnerModel = function() {
 	}
 	
 	this.notifyObservers = function(arg) {
-		//console.log("notifyObservers arg = "+arg);
+		console.log("notifyObservers arg = "+arg);
 		for(var i=0; i<this.observers.length; i++) 
 		{
 			//console.log("this = "+this);
