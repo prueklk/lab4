@@ -101,6 +101,9 @@ var SelectedDishView = function(container, model){
 		if (arg == "newGuestNumber"){
 			dishInfo();
 		}
+		if (arg == "GetDishError"){
+			alert("Error!");
+		}
 		
 	}
 	

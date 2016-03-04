@@ -48,32 +48,31 @@ var SideMenuView = function(container, model){
 						"<td><button id='"+fullMenu[i].id+"'>Delete</button></td></tr>";	
 		}
 
-		if(arg=="pending"){
-			var dishId = model.getPicId();
-			var pickedFood = model.getDish(dishId);
-			if(fullMenu.length == 0){
-				menuListTxt += 	'<tr class="costColor"><td>'+pickedFood.name+"</td>"+
-						"<td>SEK </td>" + 
-						"<td>"+model.getFoodPrice(dishId)+"</td>"+
-						"<td><p>Pending</p></td></tr>";
-			}
-			else{
-				for (var i=0; i<fullMenu.length; i++){
-					if(fullMenu[i].name != pickedFood.name){
-						menuListTxt += 	'<tr class="costColor"><td>'+pickedFood.name+"</td>"+
-							"<td>SEK </td>" + 
-							"<td>"+model.getFoodPrice(dishId)+"</td>"+
-							"<td><p>Pending</p></td></tr>";
-					}
-				}
-			}
-		}
-
 		menuListTxt += '</tbody><tfoot><tr>'+
 							'<td>Total price (x '+model.getNumberOfGuests()+')</td>'+
 							'<td>SEK</td>'+
 							'<td>'+model.getTotalMenuPrice()+'</td></tr></tfoot></table>';
 
+		if(arg=="pending"){
+			var dishId = model.getPicId();
+			var pickedFood = model.getDish(dishId);
+			var found = false;
+			if(fullMenu.length == 0){
+				menuListTxt += 	'<p class="pendingTxt">'+pickedFood.name+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
+			}
+			else{
+				for (var i=0; i<fullMenu.length; i++){
+					if(fullMenu[i].id == pickedFood.id){
+					found = true;
+					}
+				}
+				if (found == false){
+					menuListTxt += 	'<p class="pendingTxt">'+pickedFood.name+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
+					}
+			}
+		}
+
+		
 		this.menuList.html(menuListTxt);
 	}
 
@@ -94,6 +93,9 @@ var SideMenuView = function(container, model){
 		}
 		if (arg == "newPicId")
 			this.updateTable("pending");
+		if (arg == "GetDishError"){
+			alert("Error!");
+		}
 
 	}
 

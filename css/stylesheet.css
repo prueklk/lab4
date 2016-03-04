@@ -140,3 +140,8 @@ img{
 	padding-left:10px;
 	padding-right:10px;
 }
+
+.pendingTxt{
+	color: rgb(204,51,0);
+	font-style: italic;
+}

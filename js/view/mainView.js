@@ -87,7 +87,15 @@ var MainView = function(container, model){
 		this.foodDetail.html(foodInfo);
 	}
 
-	this.updateType("starter");
+	this.updateLoading = function(){
+		this.foodDetail.html("Searching");
+	}
+
+	this.updateError = function(){
+		this.foodDetail.html("Check your internet connection or try with another keyword");
+	}
+
+	this.updateType("appetizer");
 
 	
 	this.update = function(model, arg) {
@@ -98,6 +106,14 @@ var MainView = function(container, model){
 		}
 		if (arg == "searchSuccess"){
 			this.updateSearch();
+		}
+		if (arg == "loading"){
+			this.updateLoading();
+		}
+
+		if (arg == "error"){
+			alert("Error! Try to search again!");
+			this.updateError();
 		}
 		
 	}

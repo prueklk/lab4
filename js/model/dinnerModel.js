@@ -31,15 +31,15 @@ var DinnerModel = function() {
 	}
 
 	//Returns the dish that is on the menu for selected type
-	this.getSelectedDish = function(type) {
-	  for(var i = 0; i < dishes.length ; i++){
-			if(dishes[i].type == type) {
-				selectedMenu.push(dishes[i]);
-				this.notifyObservers();
-				return dishes[i];
-			}
-		}
-	}
+	// this.getSelectedDish = function(type) {
+	//   for(var i = 0; i < dishes.length ; i++){
+	// 		if(dishes[i].type == type) {
+	// 			selectedMenu.push(dishes[i]);
+	// 			this.notifyObservers();
+	// 			return dishes[i];
+	// 		}
+	// 	}
+	// }
 	    //TODO Lab 2
 
 	
@@ -60,9 +60,9 @@ var DinnerModel = function() {
 		//TODO Lab 2
 	}
 
-	this.getFullMenuBefore = function(){
-		return dishes;
-	}
+	// this.getFullMenuBefore = function(){
+	// 	return dishes;
+	// }
 
 	this.getDishIngredients = function(id){
 		var dish = this.getDish(id);
@@ -170,42 +170,47 @@ var DinnerModel = function() {
 	// function that returns all dishes of specific type (i.e. "starter", "main dish" or "dessert")
 	// you can use the filter argument to filter out the dish by name or ingredient (use for search)
 	// if you don't pass any filter all the dishes will be returned - WORKING!
-	this.getAllDishes = function (type,filter) {
-	  return $(dishes).filter(function(index,dish) {
-		var found = true;
-		if(filter){
-			found = false;
-			$.each(dish.ingredients,function(index,ingredient) {
-				if(ingredient.name.indexOf(filter)!=-1) {
-					found = true;
-				}
-			});
-			if(dish.name.indexOf(filter) != -1)
-			{
-				found = true;
-			}
-		}
-	  	return dish.type == type && found;
-	  });	
+	// this.getAllDishes = function (type,filter) {
+	//   return $(dishes).filter(function(index,dish) {
+	// 	var found = true;
+	// 	if(filter){
+	// 		found = false;
+	// 		$.each(dish.ingredients,function(index,ingredient) {
+	// 			if(ingredient.name.indexOf(filter)!=-1) {
+	// 				found = true;
+	// 			}
+	// 		});
+	// 		if(dish.name.indexOf(filter) != -1)
+	// 		{
+	// 			found = true;
+	// 		}
+	// 	}
+	//   	return dish.type == type && found;
+	//   });	
+	// }
+
+	this.getAllDishes = function(type) {
+		this.notifyObservers("loading");
+	var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
+	var category = type;
+	var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw=" + category + "?api_key="+apiKey;
+	$.ajax({
+	        type: "GET",
+	        dataType: 'json',
+	        cache: false,
+	        url: url,
+	        success: function (data) {
+	            console.log(data);
+	            return data;
+	            },
+	        error: function(){
+            	self.notifyObservers("error");
+            }
+	         });
 	}
 
-	// this.getAllDishes = function(type) {
-	// var apiKey = "11hg3g4Dkwr6pSt22n00EfS01rz568IR6";
-	// var category = type;
-	// var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&category_kw=" + category + "?api_key="+apiKey;
-	// $.ajax({
-	//          type: "GET",
-	//          dataType: 'json',
-	//          cache: false,
-	//          url: url,
-	//          success: function (data) {
-	//             console.log(data);
-	//             return data;
-	//             }
-	//          });
-	//        }
-
 	this.getRecipeSearch = function(string) {
+		this.notifyObservers("loading");
         var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
         var titleKeyword = string;
         var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw="
@@ -222,6 +227,9 @@ var DinnerModel = function() {
             	console.log(searchDishes);
             	console.log(this);
                 self.notifyObservers("searchSuccess");
+            },
+            error: function(){
+            	self.notifyObservers("error");
             }
         });
     }
@@ -237,12 +245,34 @@ var DinnerModel = function() {
 	}
 
 	//function that returns a dish of specific ID - WORKING!!
-	this.getDish = function (id) {
-	  for(var i=0 ; i < dishes.length ; i++){
-			if(dishes[i].id == id) {
-				return dishes[i];				
-			}
-		}
+	// this.getDish = function (id) {
+	//   for(var i=0 ; i < dishes.length ; i++){
+	// 		if(dishes[i].id == id) {
+	// 			return dishes[i];				
+	// 		}
+	// 	}
+	// }
+
+	this.getDish = function(id){
+		this.notifyObservers("loading");
+        var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
+        var dishID = id;
+        var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&RecipeID_kw="
+                  + dishID
+                  + "&api_key="+apiKey;
+        $.ajax({
+            type: "GET",
+            dataType: 'json',
+            cache: false,
+            url: url,
+            success: function (data) {
+            	//searchDishes = [];
+            	return data;
+            },
+            error: function(){
+            	self.notifyObservers("GetDishError");
+            }
+        });
 	}
 	
 	//////////Observable implementation
