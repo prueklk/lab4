@@ -69,7 +69,7 @@ var DinnerModel = function() {
 	// }
 
 	this.getDishFromMenu = function(id){
-
+		// console.log("getDishFromMenu // selectedMenu.length = "+selectedMenu.length);
 		for (var i = 0; i < selectedMenu.length ; i++){
 			if(selectedMenu[i].RecipeID == id){
 				return selectedMenu[i];
@@ -78,12 +78,19 @@ var DinnerModel = function() {
 	}
 	this.getDishIngredientsFromMenu = function(id){
 		var dish = this.getDishFromMenu(id);
+		// console.log("getDishIngredientsFromMenu // dish = vvv");
+		// console.log(dish);
+		// console.log(dish.Ingredients);
+
 		return dish.Ingredients;
 	}
 	this.getFoodPriceFromMenu = function(id){
 
 		var allIngredients = this.getDishIngredientsFromMenu(id);
 		var foodPrice = 0;
+
+		// console.log("getFoodPriceFromMenu // allIngredients = vvv");
+		// console.log(allIngredients);
 
 		for (var i = 0 ; i < allIngredients.length; i++){
 			//var a = allIngredients[i].price;
@@ -92,6 +99,8 @@ var DinnerModel = function() {
 
 			foodPrice += a;
 		}
+
+		// console.log("getFoodPriceFromMenu // foodPrice = "+foodPrice);
 		return foodPrice;
 	}
 	
@@ -104,7 +113,7 @@ var DinnerModel = function() {
 
 	//TODO Lab 2
 
-	this.getFoodPrice = function(){
+	this.getFoodPrice = function(){ //FOR PENDING DISH ONLY
 
 		var allIngredients = this.getDishIngredients();
 		var foodPrice = 0;
@@ -123,7 +132,7 @@ var DinnerModel = function() {
 	
 	//Returns all ingredients for all the dishes on the menu.
 	this.getAllIngredients = function() {
-		console.log("selectedMenu.length = "+selectedMenu.length);
+		// console.log("allIngredients // selectedMenu.length = "+selectedMenu.length);
 
 		var allIngredients =[];
 
@@ -132,8 +141,7 @@ var DinnerModel = function() {
 			//console.log("selectedMenu["+i+"].ingredients = "+selectedMenu[i]["ingredients"]);
 			//return selectedMenu[i].ingredients;
 			allIngredients.push(selectedMenu[i]["ingredients"]);
-			console.log("selectedMenu["+i+"].ingredients = "+selectedMenu[i]["ingredients"]);
-			//console.log("allIngredients = "+allIngredients);
+			// console.log("allIngredients // selectedMenu["+i+"].ingredients = "+selectedMenu[i]["ingredients"]);
 		}
 		return allIngredients;
 	}
@@ -154,7 +162,8 @@ var DinnerModel = function() {
 		}*/
 
 		for (var i=0; i<selectedMenu.length; i++){
-			totalPrice += this.getFoodPrice(selectedMenu[i].id);
+			// console.log("getTotalMenuPrice // selectedMenu["+i+"].id = "+selectedMenu[i].RecipeID);
+			totalPrice += this.getFoodPriceFromMenu(selectedMenu[i].RecipeID);
 		}
 		
 		var grandPrice = totalPrice * this.getNumberOfGuests();
@@ -166,23 +175,33 @@ var DinnerModel = function() {
 	//Adds the passed dish to the menu. If the dish of that type already exists on the menu
 	//it is removed from the menu and the new one added.
 	this.addDishToMenu = function() {
+		// console.log("addDishToMenu // this.getPreparedDish = vvv");
+		// console.log(this.getPreparedDish());
 
-		for (var i=0 ;  i < selectedMenu.length ; i++ ){
+		if(selectedMenu.length>0){
+			//console.log("addDishToMenu // selectedMenu = vvv");
+			//console.log(selectedMenu);
 
-			if(this.getPreparedDish().Category == selectedMenu[i].Category){
-				
-				//console.log("selectedMenu.length = "+selectedMenu.length);
+			for (var i=0 ;  i < selectedMenu.length ; i++ ){
+				//console.log("addDishToMenu // this.getPreparedDish().Category = "+this.getPreparedDish().Category);
+				//console.log("addDishToMenu // selectedMenu["+i+"].Category = "+selectedMenu[i].Category);
+				if(this.getPreparedDish().Category == selectedMenu[i].Category){
+					
+					//console.log("selectedMenu.length = "+selectedMenu.length);
 
-				 //check if selectedMenu is empty or not
-					 	//check if the new dish is duplicate
-				selectedMenu.splice(i, 1); //if so, remove that dish
+					 //check if selectedMenu is empty or not
+						 	//check if the new dish is duplicate
+					selectedMenu.splice(i, 1); //if so, remove that dish
+				}
 			}
 		}
 					 	//console.log("dishes[i].name = "+dishes[i].name);
 		selectedMenu.push(this.getPreparedDish()); //add the new dish
 
+		// console.log("addDishToMenu // after push selectedMenu = "+selectedMenu);
+
 		this.notifyObservers("newMenu");
-		return selectedMenu;
+		//return selectedMenu;
 					
 				//selectedMenu.push(dishes[i]);
 				//return selectedMenu;
@@ -192,11 +211,9 @@ var DinnerModel = function() {
 	//Removes dish from menu - NOT SURE IT IS WORKING CORRECT!
 	this.removeDishFromMenu = function(id) {
 		for (var i=0 ; i < selectedMenu.length ; i++){
-			if (selectedMenu[i].id == id){
+			if (selectedMenu[i].RecipeID == id){
 				selectedMenu.splice(i, 1);
 				this.notifyObservers("dishRemoved");
-			}else{
-
 			}
 		}
 		
@@ -340,7 +357,7 @@ var DinnerModel = function() {
 	}
 	
 	this.notifyObservers = function(arg) {
-		console.log("notifyObservers arg = "+arg);
+		//console.log("notifyObservers arg = "+arg);
 		for(var i=0; i<this.observers.length; i++) 
 		{
 			//console.log("this = "+this);

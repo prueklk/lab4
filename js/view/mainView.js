@@ -84,10 +84,10 @@ var MainView = function(container, model){
 
 				foodInfo +="<div class=\"col-md-4\">"+
 									"<div class=\"thumbnail\">"+
-										"<img src=\""+menu[i].ImageURL120+"\" id=\""+menu[i].Title +"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
+										"<img src=\""+menu[i].ImageURL120+"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
 										"<div class=\"caption\">"+
 										"<p><a href=\"#\" class=\"btn btn-primary btn-block\" role=\"button\" id=\""+menu[i].RecipeID+"\">"+menu[i].Title+"</a></p>"+
-										"<p>\"Here is how you make it... Lore ipsum...\"</p>"+
+										"<p>Here is how you cook it...</p>"+
 								"</div></div></div>";
 			}
 			this.foodDetail.html(foodInfo);
@@ -105,7 +105,7 @@ var MainView = function(container, model){
 
 	
 	this.update = function(model, arg) {
-		console.log("UPDATE mainView // arg = "+arg);
+		//console.log("UPDATE mainView // arg = "+arg);
 
 		if (arg == "appetizer" || arg == "main dish" || arg == "dessert"){
 			this.prepareView(arg);

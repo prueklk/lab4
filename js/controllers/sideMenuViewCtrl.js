@@ -9,14 +9,21 @@ var SideMenuViewCtrl = function(view, model) {
 	});
 
 	view.confirmDinner.click(function(){
-		overallStateCtrl.mainView.container.hide();
-		overallStateCtrl.selectedDishView.container.hide();
-		overallStateCtrl.sideMenuView.container.hide();
-		overallStateCtrl.overView.container.show();
+		var menu = model.getFullMenu();
+		if(menu.length>0){
+			overallStateCtrl.mainView.container.hide();
+			overallStateCtrl.selectedDishView.container.hide();
+			overallStateCtrl.sideMenuView.container.hide();
+			overallStateCtrl.overView.container.show();
+		}else{
+			alert("Please add dish to menu.");
+		}
 	});
 
-	view.menuList.click(function(event){
+	view.menuList.click(function(event){ //click delete
 		var x = event.target;
+		console.log("menuList.click // x = vvv");
+		console.log(x);
     	//document.getElementById("menuList").innerHTML = "Triggered by a " + x.id + " element";
     	model.removeDishFromMenu(x.id);
 	});

@@ -39,7 +39,7 @@ var SelectedDishView = function(container, model){
 	var pickedFood;
 
 	var prepareDish = function(){
-		console.log("prepareDish");
+		//console.log("prepareDish");
 		dishId = model.getPicId();
 		pickedFood = model.getDish(dishId);
 	}
@@ -47,24 +47,22 @@ var SelectedDishView = function(container, model){
 	
 	var dishInfo = function(){
 		
-		console.log("dishInfo pickedFood = vvv");
+		//console.log("dishInfo pickedFood = vvv");
 		pickedFood = model.getPreparedDish();
-		console.log(pickedFood);
-		
-	
-		
+		//console.log(pickedFood);
+				
 		
 		var foodDescription = "";
 		foodDescription += "<h2>"+pickedFood.Title+"</h2>"+
 							"<img src=\""+pickedFood.ImageURL+"\" id=\""+pickedFood.Title+"\" class=\"foodPics\" style=\"width:128px;height:128px;\">"+
-							"<div>Here is how you make it... Lore ipsum...</div>"
+							"<div>"+pickedFood.Description+"</div>"
 		
 		//foodDescription += '<br><button class="btn" id="backButton">Back to Select Dish</button>';
 		this.pickedFoodDiv = container.find("#selectedDishDetails");
 		this.pickedFoodDiv.html(foodDescription);
 
 		this.prepDiv = container.find("#prepDiv");
-		this.prepDiv.html("<p>Here is how you make it... Lore ipsum...");
+		this.prepDiv.html("<p>"+pickedFood.Instructions+"</p>");
 
 
 		//this.ingredientsBox = container.find("#ingredientsBox");
@@ -109,7 +107,7 @@ var SelectedDishView = function(container, model){
 	}
 	
 	this.update = function(model, arg) {
-		console.log("UPDATE selectedDishView // arg = "+arg);
+		//console.log("UPDATE selectedDishView // arg = "+arg);
 		
 		if (arg == "newPicId"){
 

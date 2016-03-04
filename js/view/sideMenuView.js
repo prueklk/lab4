@@ -39,36 +39,47 @@ var SideMenuView = function(container, model){
 								'<th>Cost</th>'+
 								'<th></th>'+
 							'</tr></thead><tbody>';
+
+		//console.log("updateTable // fullMenu.length = "+fullMenu.length);
 		for (var i=0; i<fullMenu.length; i++){
-			var fullPrice = model.getFoodPrice(fullMenu[i].RecipeID);
+			var fullPrice = model.getFoodPriceFromMenu(fullMenu[i].RecipeID);
 
 			menuListTxt += 	'<tr class="costColor"><td>'+fullMenu[i].Title+"</td>"+
 						"<td>SEK </td>" + 
 						"<td>"+fullPrice+"</td>"+
 						"<td><button id='"+fullMenu[i].RecipeID+"'>Delete</button></td></tr>";	
 		}
-
+		//console.log("updateTable // after for loop");
 		menuListTxt += '</tbody><tfoot><tr>'+
 							'<td>Total price (x '+model.getNumberOfGuests()+')</td>'+
 							'<td>SEK</td>'+
 							'<td>'+model.getTotalMenuPrice()+'</td></tr></tfoot></table>';
 
 		if(arg=="pending"){
+			// console.log("updateTable // arg = pending");
+
 			var dishId = model.getPicId();
 			var pickedFood = model.getPreparedDish();
 			var found = false;
+
+			// console.log("updateTable // fullMenu.length = "+fullMenu.length);
+			// console.log("updateTable // pickedFood = vvv");
+			// console.log(pickedFood);
+
+
 			if(fullMenu.length == 0){
-				menuListTxt += 	'<p class="pendingTxt">'+pickedFood.Title+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
-			}
-			else{
+				// console.log("fullMenu.length == 0");
+				menuListTxt += 	'<p class="pendingTxt">+'+pickedFood.Title+' SEK '+model.getFoodPrice()*model.getNumberOfGuests()+' pending...</p>';
+
+			}else{
 				for (var i=0; i<fullMenu.length; i++){
-					if(fullMenu[i].id == pickedFood.id){
-					found = true;
+					if(fullMenu[i].RecipeID == pickedFood.RecipeID){
+						found = true;
 					}
 				}
 				if (found == false){
-					menuListTxt += 	'<p class="pendingTxt">'+pickedFood.Title+' SEK '+model.getFoodPrice(dishId)+' Pending</p>';
-					}
+						menuListTxt += 	'<p class="pendingTxt">+'+pickedFood.Title+' SEK '+model.getFoodPrice()+' pending...</p>';
+				}
 			}
 		}
 
@@ -92,6 +103,7 @@ var SideMenuView = function(container, model){
 			this.updateTable("normal");
 		}
 		if (arg == "updateSideView"){
+			console.log("updateSideView");
 			this.updateTable("pending");
 		}
 		if (arg == "GetDishError"){
