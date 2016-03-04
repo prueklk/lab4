@@ -18,6 +18,7 @@ var MainViewCtrl = function(view, model) {
 		var type = document.getElementById("foodDrop").value;
 		if (type!="empty"){
 			view.update(this, type);	
+			searchValue.value = "";
 		}
 	};
 

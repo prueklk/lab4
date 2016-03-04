@@ -10,6 +10,7 @@ var SelectedDishViewCtrl = function(view, model) {
 	
 
 	view.backButton.click(function(){
+		overallStateCtrl.sideMenuView.updateTable("normal");
 		overallStateCtrl.mainView.container.show();
 		overallStateCtrl.selectedDishView.container.hide();
 	});

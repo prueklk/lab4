@@ -135,3 +135,8 @@ img{
 .imgInstruction{
 	padding: 10px;
 }
+
+#mainView{
+	padding-left:10px;
+	padding-right:10px;
+}

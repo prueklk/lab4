@@ -167,46 +167,46 @@ var DinnerModel = function() {
 		//TODO Lab 2
 	}
 
-	//function that returns all dishes of specific type (i.e. "starter", "main dish" or "dessert")
-	//you can use the filter argument to filter out the dish by name or ingredient (use for search)
-	//if you don't pass any filter all the dishes will be returned - WORKING!
-	// this.getAllDishes = function (type,filter) {
-	//   return $(dishes).filter(function(index,dish) {
-	// 	var found = true;
-	// 	if(filter){
-	// 		found = false;
-	// 		$.each(dish.ingredients,function(index,ingredient) {
-	// 			if(ingredient.name.indexOf(filter)!=-1) {
-	// 				found = true;
-	// 			}
-	// 		});
-	// 		if(dish.name.indexOf(filter) != -1)
-	// 		{
-	// 			found = true;
-	// 		}
-	// 	}
-	//   	return dish.type == type && found;
-	//   });	
-	// }
+	// function that returns all dishes of specific type (i.e. "starter", "main dish" or "dessert")
+	// you can use the filter argument to filter out the dish by name or ingredient (use for search)
+	// if you don't pass any filter all the dishes will be returned - WORKING!
+	this.getAllDishes = function (type,filter) {
+	  return $(dishes).filter(function(index,dish) {
+		var found = true;
+		if(filter){
+			found = false;
+			$.each(dish.ingredients,function(index,ingredient) {
+				if(ingredient.name.indexOf(filter)!=-1) {
+					found = true;
+				}
+			});
+			if(dish.name.indexOf(filter) != -1)
+			{
+				found = true;
+			}
+		}
+	  	return dish.type == type && found;
+	  });	
+	}
 
-	this.getAllDishes = function(type) {
-	var apiKey = "18f3cT02U9f6yRl3OKDpP8NA537kxYKu";
-	var category = type;
-	var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&category_kw=" + category + "?api_key="+apiKey;
-	$.ajax({
-	         type: "GET",
-	         dataType: 'json',
-	         cache: false,
-	         url: url,
-	         success: function (data) {
-	            console.log(data);
-	            return data;
-	            }
-	         });
-	       }
+	// this.getAllDishes = function(type) {
+	// var apiKey = "11hg3g4Dkwr6pSt22n00EfS01rz568IR6";
+	// var category = type;
+	// var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&category_kw=" + category + "?api_key="+apiKey;
+	// $.ajax({
+	//          type: "GET",
+	//          dataType: 'json',
+	//          cache: false,
+	//          url: url,
+	//          success: function (data) {
+	//             console.log(data);
+	//             return data;
+	//             }
+	//          });
+	//        }
 
 	this.getRecipeSearch = function(string) {
-        var apiKey = "18f3cT02U9f6yRl3OKDpP8NA537kxYKu";
+        var apiKey = "1hg3g4Dkwr6pSt22n00EfS01rz568IR6";
         var titleKeyword = string;
         var url = "http://api.bigoven.com/recipes?pg=1&rpp=25&title_kw="
                   + titleKeyword 

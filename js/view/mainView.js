@@ -5,16 +5,16 @@ var MainView = function(container, model){
 	string = "";
 	
 	string += "<div id=\"picBox\">"+
-			"<div id=\"dishDiv\">"+
+			"<div id=\"dishDiv\" class='row'>"+
 				"<h4>Select dish:</h4>"+
 				"<hr class=\"blackLine\">"+
-				"<span><input type=\"text\" placeholder=\"Enter key words\" id=\"searchValue\">"+
-				"<button class=\"btn\" id=\"searchButton\">Search</button></span>"+
- 				"<select id=\"foodDrop\">"+
-				"</select>"+
+				"<div class='col-md-6'><input type=\"text\" placeholder=\"Enter key words\" id=\"searchValue\">"+
+				"<button class=\"btn\" id=\"searchButton\">Search</button></div>"+
+ 				"<div class='col-md-6' align=\"right\">Sort by: <select id=\"foodDrop\">"+
+				"</select></div>"+
 				"</div>"+		
 				"<div>"+
-				"<div class=\"row\" id =\"foodDetail\">"+
+				"<div class=\"row\" id=\"foodDetail\">"+
 				"</div>"+
 			"</div>"+
 		"</div>"
@@ -93,7 +93,7 @@ var MainView = function(container, model){
 	this.update = function(model, arg) {
 		//console.log("UPDATE mainView // arg = "+arg);
 
-		if (arg == "starter" || arg == "main dish" || arg == "dessert"){
+		if (arg == "appetizer" || arg == "main dish" || arg == "dessert"){
 			this.updateType(arg);
 		}
 		if (arg == "searchSuccess"){

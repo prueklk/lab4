@@ -31,7 +31,7 @@ var SideMenuView = function(container, model){
 
 	this.numberOfGuests.html(model.getNumberOfGuests());
 	
-	this.updateTable = function(){
+	this.updateTable = function(arg){
 		var fullMenu = model.getFullMenu();
 		var menuListTxt = '<table class="table">'+
 							'<thead><tr>'+
@@ -48,6 +48,27 @@ var SideMenuView = function(container, model){
 						"<td><button id='"+fullMenu[i].id+"'>Delete</button></td></tr>";	
 		}
 
+		if(arg=="pending"){
+			var dishId = model.getPicId();
+			var pickedFood = model.getDish(dishId);
+			if(fullMenu.length == 0){
+				menuListTxt += 	'<tr class="costColor"><td>'+pickedFood.name+"</td>"+
+						"<td>SEK </td>" + 
+						"<td>"+model.getFoodPrice(dishId)+"</td>"+
+						"<td><p>Pending</p></td></tr>";
+			}
+			else{
+				for (var i=0; i<fullMenu.length; i++){
+					if(fullMenu[i].name != pickedFood.name){
+						menuListTxt += 	'<tr class="costColor"><td>'+pickedFood.name+"</td>"+
+							"<td>SEK </td>" + 
+							"<td>"+model.getFoodPrice(dishId)+"</td>"+
+							"<td><p>Pending</p></td></tr>";
+					}
+				}
+			}
+		}
+
 		menuListTxt += '</tbody><tfoot><tr>'+
 							'<td>Total price (x '+model.getNumberOfGuests()+')</td>'+
 							'<td>SEK</td>'+
@@ -56,21 +77,23 @@ var SideMenuView = function(container, model){
 		this.menuList.html(menuListTxt);
 	}
 
-	this.updateTable();
+	this.updateTable("normal");
 	
 	this.update = function(model, arg) {
 		//console.log("UPDATE sideMenuView // arg = "+arg);
 		
 		if (arg == "newGuestNumber"){
 			this.numberOfGuests.html(model.getNumberOfGuests());
-			this.updateTable();
+			this.updateTable("normal");
 		}
 		if (arg == "newMenu"){
-			this.updateTable();
+			this.updateTable("normal");
 		}
 		if (arg == "dishRemoved"){
-			this.updateTable();
+			this.updateTable("normal");
 		}
+		if (arg == "newPicId")
+			this.updateTable("pending");
 
 	}
 
